@@ -1,0 +1,15 @@
+tecnologias:
+  - lenguaje: Python
+    framework: Flask
+    descripcion: Backend de la aplicación web
+  - frontend: HTML/CSS/JavaScript
+    descripcion: Interfaz de usuario
+  - contenedor: Docker
+    descripcion: Contenedorización de la aplicación
+  - despliegue:
+    - plataforma: Railway
+      descripcion: Despliegue en Railway
+    - plataforma: Render
+      descripcion: Despliegue alternativo en Render
+  - pruebas: unittest
+    descripcion: Framework de pruebas unitarias

@@ -25,6 +25,17 @@ jobs:
       run:  pip install -r requirements.txt
 
 
-    - name: 🏗️ Build Docker image
+    - name: 🔐 Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 🏗️ Build and push Docker image
+      env:
+        IMAGE_NAME: ghcr.io/${{ github.repository }}
       run: |
-        docker build -t test-image .
+        IMAGE_NAME_LOWER=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')
+        docker build -t "$IMAGE_NAME_LOWER:latest" .
+        docker push "$IMAGE_NAME_LOWER:latest"

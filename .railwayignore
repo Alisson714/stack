@@ -1,0 +1,44 @@
+# Archivos de desarrollo
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentación de desarrollo
+*.md
+!README.md
+
+# Archivos de prueba (opcional, descomenta si no quieres incluir tests)
+# test_*.py
+# *_test.py
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp

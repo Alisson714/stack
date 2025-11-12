@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: calculadora-alisson
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    branch: alisson
+    buildCommand: ""
+    startCommand: "python app.py"
+    envVars:
+      - key: PORT
+        value: 10000
+    healthCheckPath: /
+    autoDeploy: true

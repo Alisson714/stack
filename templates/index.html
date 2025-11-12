@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Flask</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .calculator {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .result.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .result.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .hidden {
+            display: none;
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        @media (max-width: 600px) {
+            .logo {
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Alisson Velez - Calculadora Flask" class="logo">
+        </div>
+        <h1>🧮 Calculadora Flask</h1>
+        <form id="calculatorForm">
+            <div class="form-group">
+                <label for="number1">Primer número:</label>
+                <input type="number" id="number1" step="any" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="operation">Operación:</label>
+                <select id="operation" required>
+                    <option value="">Selecciona una operación</option>
+                    <option value="add">➕ Suma</option>
+                    <option value="subtract">➖ Resta</option>
+                    <option value="multiply">✖️ Multiplicación</option>
+                    <option value="divide">➗ División</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="number2">Segundo número:</label>
+                <input type="number" id="number2" step="any" required>
+            </div>
+            
+            <button type="submit">Calcular</button>
+        </form>
+        
+        <div id="result" class="result hidden"></div>
+    </div>
+
+    <script>
+        document.getElementById('calculatorForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const number1 = document.getElementById('number1').value;
+            const number2 = document.getElementById('number2').value;
+            const operation = document.getElementById('operation').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        a: parseFloat(number1),
+                        b: parseFloat(number2),
+                        operation: operation
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.textContent = `Resultado: ${data.result}`;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.textContent = `Error: ${data.error}`;
+                    resultDiv.className = 'result error';
+                }
+                
+                resultDiv.classList.remove('hidden');
+                
+            } catch (error) {
+                resultDiv.textContent = 'Error de conexión';
+                resultDiv.className = 'result error';
+                resultDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
